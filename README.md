@@ -26,6 +26,27 @@ java -jar target/mvn-jdbc-1.0-SNAPSHOT-launcher.jar
 - La base de datos se guarda en el archivo `crud_db.mv.db` dentro de tu carpeta de usuario (`~`). Bórralo para empezar de cero.
 - El correo electrónico es único: no se pueden crear dos personas con el mismo.
 
+## Estructura
+
+```text
+src/main/java/com/juniverse/jdbc/
+├── Main.java            # prepara la base de datos y abre el menú
+├── PersonMenu.java      # menú de consola: depende de PersonRepository, no de JDBC
+├── dao/
+│   ├── PersonRepository.java  # contrato de acceso a datos
+│   └── PersonDao.java         # implementación con JDBC y H2
+├── dto/                 # Person
+└── util/                # DatabaseUtil
+```
+
+## Pruebas
+
+```bash
+mvn test
+```
+
+El menú se prueba con una implementación en memoria de `PersonRepository` y una entrada simulada, sin base de datos.
+
 ## Licencia
 
 Código de ejemplo de uso libre con fines educativos.

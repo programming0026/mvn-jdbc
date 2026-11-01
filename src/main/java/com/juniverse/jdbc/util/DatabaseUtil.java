@@ -6,12 +6,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import java.util.logging.Logger;
+import com.juniverse.jdbc.AppLogger;
 /**
  * Conexión a la base de datos H2 (archivo {@code ~/crud_db}) y creación de la tabla con datos de ejemplo.
  *
  * @author ajuar
  */
 public final class DatabaseUtil {
+    private static final Logger LOGGER = AppLogger.get(DatabaseUtil.class);
+
 
     private static final String URL = "jdbc:h2:~/crud_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE";
     private static final String USERNAME = "sa";
@@ -45,7 +49,7 @@ public final class DatabaseUtil {
             try {
                 connection.close();
             } catch (SQLException e) {
-                System.err.println("Error al cerrar conexión: " + e.getMessage());
+                LOGGER.severe("Error al cerrar conexión: " + e.getMessage());
             }
         }
     }
@@ -64,12 +68,12 @@ public final class DatabaseUtil {
         try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
 
             stmt.execute(sql);
-            System.out.println("Base de datos H2 inicializada correctamente");
+            LOGGER.info("Base de datos H2 inicializada correctamente");
 
             insertDataExamples();
 
         } catch (SQLException e) {
-            System.err.println("Error al crear tabla: " + e.getMessage());
+            LOGGER.severe("Error al crear tabla: " + e.getMessage());
         }
     }
 
@@ -92,11 +96,11 @@ public final class DatabaseUtil {
                     """;
 
                 stmt.executeUpdate(insertSQL);
-                System.out.println("Datos de ejemplo insertados correctamente");
+                LOGGER.info("Datos de ejemplo insertados correctamente");
             }
 
         } catch (SQLException e) {
-            System.out.println("Nota: No se pudieron insertar datos de ejemplo");
+            LOGGER.info("Nota: No se pudieron insertar datos de ejemplo");
         }
     }
 }

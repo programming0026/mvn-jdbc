@@ -12,19 +12,25 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import java.util.logging.Logger;
+import com.juniverse.jdbc.AppLogger;
+import java.util.logging.Level;
 /**
  * Acceso a datos de la tabla Persona con JDBC y consultas parametrizadas (PreparedStatement),
  * que evitan la inyección SQL.
  *
  * @author ajuar
  */
-public class PersonDao {
+public class PersonDao implements PersonRepository {
+    private static final Logger LOGGER = AppLogger.get(PersonDao.class);
+
 
     /**
      * Inserta varias personas con el ID que ya traen.
      * @param list personas a guardar
      * @return cantidad de filas insertadas
      */
+    @Override
     public int save(List<Person> list) {
         int cont = 0;
         if (!list.isEmpty()) {
@@ -38,7 +44,7 @@ public class PersonDao {
                     cont += pstmt.executeUpdate();
                 }
             } catch (SQLException ex) {
-                ex.printStackTrace(System.err);
+                LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
         return cont;
@@ -48,6 +54,7 @@ public class PersonDao {
      * Devuelve todas las personas.
      * @return lista (vacía si no hay o si ocurre un error)
      */
+    @Override
     public List<Person> findAll() {
         String sql = "SELECT * FROM Persona";
         List<Person> list = new ArrayList<>();
@@ -61,7 +68,7 @@ public class PersonDao {
                         rs.getString("EMAIL")));
             }
         } catch (SQLException ex) {
-            ex.printStackTrace(System.err);
+            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
         }
         return list;
     }
@@ -71,6 +78,7 @@ public class PersonDao {
      * @param id identificador
      * @return la persona, o vacío si no existe
      */
+    @Override
     public Optional<Person> findById(int id) {
         String sql = "SELECT ID, NAME, EMAIL FROM Persona WHERE ID = ?";
 
@@ -90,7 +98,7 @@ public class PersonDao {
             }
 
         } catch (SQLException e) {
-            System.err.println("Error al obtener la persona: " + e.getMessage());
+            LOGGER.severe("Error al obtener la persona: " + e.getMessage());
 
         }
         return Optional.empty();
@@ -101,6 +109,7 @@ public class PersonDao {
      * @param id identificador
      * @return {@code true} si se eliminó
      */
+    @Override
     public boolean deleteById(int id) {
         String sql = "DELETE FROM Persona WHERE ID = ?";
         try (Connection conn = DatabaseUtil.getConnection(); 
@@ -110,7 +119,7 @@ public class PersonDao {
             return rowsAffected > 0;
 
         } catch (SQLException e) {
-            System.err.println("Error al eliminar la persona: " + e.getMessage());
+            LOGGER.severe("Error al eliminar la persona: " + e.getMessage());
             return false;
         }
     }
@@ -120,6 +129,7 @@ public class PersonDao {
      * @param person persona con su ID y los nuevos datos
      * @return {@code true} si se actualizó
      */
+    @Override
     public boolean update(Person person) {
         String sql = "UPDATE Persona SET NAME = ?, EMAIL = ? WHERE ID = ?";
 
@@ -131,7 +141,7 @@ public class PersonDao {
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            System.err.println("Error al actualizar la persona: " + e.getMessage());
+            LOGGER.severe("Error al actualizar la persona: " + e.getMessage());
             return false;
         }
     }
@@ -141,6 +151,7 @@ public class PersonDao {
      * @param person persona a guardar
      * @return {@code true} si se insertó (falla, por ejemplo, si el correo ya existe)
      */
+    @Override
     public boolean save(Person person) {
         out.println("Guardando los registros");
         String query = "INSERT INTO Persona(NAME, EMAIL) VALUES(?,?)";
@@ -155,13 +166,13 @@ public class PersonDao {
                     if (generatedKeys.next()) {
                         person.setId(generatedKeys.getInt(1));
                     } else {
-                        System.out.println("Warning: No se pudo obtener el ID generado");
+                        LOGGER.info("Warning: No se pudo obtener el ID generado");
                     }
                 }
             }
             return rowsAffected > 0;
         } catch (SQLException ex) {
-            ex.printStackTrace(System.err);
+            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
             return false;
         }
     }
