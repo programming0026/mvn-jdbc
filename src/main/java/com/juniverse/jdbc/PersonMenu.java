@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 /**
  * Menú de consola con el CRUD completo (crear, listar, buscar, actualizar y eliminar) sobre una base de datos H2.
  *
- * @author ajuar
+ * @author Java Universe
  */
 public class PersonMenu {
     private final Logger LOGGER = AppLogger.get(PersonMenu.class);

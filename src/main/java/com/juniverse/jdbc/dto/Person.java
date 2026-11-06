@@ -3,7 +3,7 @@ package com.juniverse.jdbc.dto;
 /**
  * Persona con identificador, nombre y correo electrónico.
  *
- * @author ajuar
+ * @author Java Universe
  */
 public class Person {
 

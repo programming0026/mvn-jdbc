@@ -19,7 +19,7 @@ import java.util.logging.Level;
  * Acceso a datos de la tabla Persona con JDBC y consultas parametrizadas (PreparedStatement),
  * que evitan la inyección SQL.
  *
- * @author ajuar
+ * @author Java Universe
  */
 public class PersonDao implements PersonRepository {
     private static final Logger LOGGER = AppLogger.get(PersonDao.class);

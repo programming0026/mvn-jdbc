@@ -7,7 +7,7 @@ import java.util.Scanner;
 /**
  * Punto de entrada: prepara la base de datos H2 y muestra el menú de consola del CRUD de personas.
  *
- * @author ajuar
+ * @author Java Universe
  */
 public class Main {
 

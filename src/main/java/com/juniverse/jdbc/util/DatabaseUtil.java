@@ -11,7 +11,7 @@ import com.juniverse.jdbc.AppLogger;
 /**
  * Conexión a la base de datos H2 (archivo {@code ~/crud_db}) y creación de la tabla con datos de ejemplo.
  *
- * @author ajuar
+ * @author Java Universe
  */
 public final class DatabaseUtil {
     private static final Logger LOGGER = AppLogger.get(DatabaseUtil.class);
